@@ -1,0 +1,965 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  min-height: 100vh;
+  position: relative;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.power-warning-icon {
+  display: inline-block !important;
+  margin-left: 8px !important;
+  color: #ff4444 !important;
+  font-weight: bold !important;
+  animation: pulse 1s infinite;
+  z-index: 10;
+  position: relative;
+}
+
+.resource-value.power {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.critical-warning {
+  color: #ff4444 !important;
+  font-weight: bold;
+}
+
+.warning {
+  color: #ffa500 !important;
+}
+
+.cost-too-high {
+  color: #ff4444;
+}
+
+.cost-difference {
+  font-size: 0.9em;
+  margin-left: 4px;
+  color: #ff4444;
+  font-style: italic;
+}
+
+.building-info-cost {
+  transition: color 0.2s ease;
+}
+
+.bottom-popup button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #444;
+}
+
+.bottom-popup button:disabled .cost-difference {
+  display: block;
+  font-size: 0.8em;
+  color: #ff4444;
+  margin-top: 4px;
+}
+
+.bottom-popup button:disabled:hover {
+  background-color: #444;
+  transform: none;
+}
+
+.building-gif-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  vertical-align: middle;
+  image-rendering: pixelated;
+  transform: translateY(-3px);
+  position: relative;
+  top: -4px;
+}
+
+
+.keybind {
+  font-size: 0.8em;
+  opacity: 0.8;
+  margin-left: 4px;
+  padding: 1px 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.building-actions {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  z-index: 1000;
+  width: fit-content;
+}
+
+/* Keep these related styles */
+.building-actions .circle-button {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 0;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.building-actions .circle-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, #4a4a4a, #3a3a3a);
+}
+
+.building-actions .circle-button:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  cursor: not-allowed;
+}
+
+.building-actions .action-icon {
+  font-size: 1.5em;
+}
+
+.building-actions .keybind {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 0.7em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.building-actions .building-cost {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: #4caf50;
+  font-size: 0.9em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  text-align: center;
+}
+
+.building-actions .cost-difference {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: #ff4444;
+  font-size: 0.8em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  width: max-content;
+}
+
+.building-actions .circle-button.sell {
+  background: linear-gradient(145deg, #4a3030, #3a2020);
+}
+
+.building-actions .circle-button.sell:hover {
+  background: linear-gradient(145deg, #5a3535, #4a2525);
+}
+
+.building-actions .sell-value {
+  color: #ffd700;
+}
+
+/* Floating shelf shop styling */
+.building-options {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.building-options button {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(40, 40, 40, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 0;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Prevent button from being squished */
+}
+
+.building-options button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(60, 60, 60, 0.9);
+}
+
+.building-options button:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+}
+
+/* Consolidate icon styles */
+.building-options .building-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.building-options .building-icon .building-gif-icon {
+  width: 32px !important;
+  height: 32px !important;
+  transform: none !important;
+  top: 0 !important;
+  position: relative;
+}
+
+.building-options .keybind {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 0.7em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.building-options .building-cost {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: #4caf50;
+  font-size: 0.9em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.building-options button:disabled .building-cost {
+  color: #ff4444;
+}
+
+/* Tooltip styling */
+.building-tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1001;
+}
+
+.circle-button:hover .building-tooltip {
+  opacity: 1;
+}
+
+/* Add a small arrow to the tooltip */
+.building-tooltip:after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid rgba(0, 0, 0, 0.9);
+}
+
+.bottom-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 800px; /* Set minimum width */
+  max-width: 90vw; /* Don't exceed 90% of viewport width */
+  z-index: 1000;
+}
+
+/* Adjust the GIF icon size in the shop */
+.building-options .building-icon .building-gif-icon {
+  width: 32px;
+  height: 32px;
+  transform: none;
+  top: 0;
+}
+
+
+/* Shop-specific icon styling that will override the above */
+.building-options .building-icon .building-gif-icon {
+  width: 32px !important;
+  height: 32px !important;
+  transform: none !important;
+  top: 0 !important;
+  position: relative;
+}
+
+.building-options button {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+
+/* Shop-specific icon styles */
+.building-options .building-icon .building-gif-icon {
+  width: 32px !important;
+  height: 32px !important;
+  transform: none !important;
+  top: 0 !important;
+  position: relative;
+}
+
+.building-options .circle-button {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  max-width: 56px;
+  max-height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 0;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 56px;
+}
+
+.building-options .circle-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, #4a4a4a, #3a3a3a);
+}
+
+.building-options .circle-button:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  cursor: not-allowed;
+}
+
+/* Update the icon styles for the circle button */
+.building-options .circle-button .building-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px; /* Reduced padding to allow for larger icons */
+}
+
+.building-options .circle-button .building-icon .building-gif-icon {
+  width: 42px !important;
+  height: 42px !important;
+  object-fit: contain !important;
+  image-rendering: pixelated !important;
+  transform: none !important;
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  margin: 0 !important;
+}
+
+/* Adjust specific building icons if needed */
+.building-options .circle-button .building-icon img[alt="Factory"].building-gif-icon,
+.building-options .circle-button .building-icon img[alt="Warehouse"].building-gif-icon {
+  width: 32px !important;
+  height: 32px !important;
+  left: 2px !important;
+  transform: none !important;
+}
+
+/* Adjust specific building icons if needed */
+.building-options .circle-button .building-icon img[alt="Power Plant"].building-gif-icon,
+.building-options .circle-button .building-icon img[alt="Research Lab"].building-gif-icon,
+.building-options .circle-button .building-icon img[alt="Compactor"].building-gif-icon {
+  width: 64px !important;
+  height: 64px !important;
+  top: -12px !important;
+  bottom: 30px !important;
+  left: 4px !important;
+  transform: none !important;
+}
+
+.building-icon,
+.circle-button,
+.building-gif-icon,
+.tile {
+  outline: none !important;  /* Removes focus outline */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
+  user-select: none; /* Prevents text/element selection */
+}
+
+.building-icon:focus,
+.circle-button:focus,
+.building-gif-icon:focus,
+.tile:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast-message {
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
+  max-width: 400px;
+  animation: slideIn 0.3s ease-out;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.toast-message.error {
+  border-left: 4px solid #ff4444;
+}
+
+.toast-message.success {
+  border-left: 4px solid #4caf50;
+}
+
+.toast-message.info {
+  border-left: 4px solid #2196f3;
+}
+
+.toast-icon {
+  font-size: 1.2em;
+}
+
+.toast-text {
+  font-size: 0.9em;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Add or update these styles */
+.building-info {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 300px;
+}
+
+.building-info h3 {
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.1em;
+}
+
+.building-info-item {
+  background: rgba(40, 40, 40, 0.5);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
+  padding: 8px;
+}
+
+.building-info-main {
+  display: flex;
+  gap: 10px;
+}
+
+.building-info-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.building-info-content {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.building-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+/* Add these new styles after your existing CSS */
+.building-info-bonus {
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.building-info-bonus .profit {
+  color: #09ac0e;
+}
+
+.building-info-bonus .neutral {
+  color: #888;
+}
+
+.building-name {
+  font-size: 1em;
+  font-weight: 800;
+}
+
+.building-cost {
+  color: #4caf50;
+  font-size: 0.9em;
+}
+
+.building-description {
+  color: #aaa;
+  font-size: 0.9em;
+  margin-bottom: 4px;
+}
+
+.building-quick-stats {
+  font-size: 0.8em;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-item {
+  font-size: 1em;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: block;
+  width: 100%;
+}
+
+.power-consumption {
+  color: #ff4444;
+}
+
+.profit {
+  color: #4caf50;
+}
+
+.building-info-item:hover {
+  background: rgba(50, 50, 50, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Add specific styling for the icons inside */
+.building-info-icon .building-gif-icon {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain;
+  image-rendering: pixelated;
+  transform: none !important;
+  position: relative !important;
+}
+
+/* Specific adjustments for certain building types */
+.building-info-icon img[alt="Factory"].building-gif-icon {
+  width: 42px !important;
+  height: 42px !important;
+  top: 30px !important;
+  left: 5px !important;
+}
+
+.building-info-icon img[alt="Warehouse"].building-gif-icon {
+  width: 42px !important;
+  height: 42px !important;
+  top: 15px !important;
+  left: 5px !important;
+}
+
+.building-info-icon img[alt="Power Plant"].building-gif-icon,
+.building-info-icon img[alt="Research Lab"].building-gif-icon {
+  width: 82px !important;
+  height: 82px !important;
+  top: -5px !important;
+  left: 5px !important;
+}
+
+.building-info-icon img[alt="Compactor"].building-gif-icon {
+  width: 82px !important;
+  height: 82px !important;
+  top: 5px !important;
+  left: 5px !important;
+}
+
+.building-actions .circle-button {
+  /* ... existing styles ... */
+  position: relative;
+}
+
+.building-actions .building-tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.building-actions .circle-button:hover .building-tooltip {
+  opacity: 1;
+}
+
+/* Resource Bar Styling */
+.resource-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.resource-container {
+  display: flex;
+  gap: 32px;
+}
+
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.resource-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.resource-icon {
+  font-size: 1.5em;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+
+.resource-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.resource-label {
+  font-size: 0.8em;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.resource-value {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.money-item .resource-value {
+  color: #4caf50;
+}
+
+.power-item .resource-value {
+  color: #2196f3;
+}
+
+.power-item .resource-value.warning {
+  color: #ffa500;
+}
+
+.power-item .resource-value.critical-warning {
+  color: #ff4444;
+  animation: pulse 1s infinite;
+}
+
+.power-storage {
+  margin-left: 8px;
+  font-size: 0.9em;
+  color: #8bc34a;
+  background: rgba(139, 195, 74, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.power-warning-icon {
+  margin-left: 8px;
+  animation: pulse 1s infinite;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.control-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.button-icon {
+  font-size: 1.2em;
+}
+
+
+/* Simplified level indicator */
+.building-level {
+  position: absolute;
+  bottom: -1px;
+  right: -2px;
+  color: #ffdd57;
+  font-size: 0.7rem;
+  padding: 0px 1.5px;
+  pointer-events: none;
+  font-weight: bold;
+  background: linear-gradient(135deg, #0e0e0e, #e7150e96);
+  border-radius: 6px;
+  border: 0.5px solid #ffdd57;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Remove any data-level specific styles */
+.building-level[data-level="2"],
+.building-level[data-level="3"] {
+  box-shadow: none;
+}
+
+/* Add these styles for the grid container */
+.grid-container {
+  transform-style: flat;
+  will-change: transform;
+  backface-visibility: visible;
+  image-rendering: pixelated;
+  transform: translate3d(0, 0, 0); /* Force GPU acceleration */
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.building-letter {
+  image-rendering: pixelated;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: visible;
+  -webkit-font-smoothing: antialiased;
+}
+
+.building-gif-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  vertical-align: middle;
+  image-rendering: pixelated !important;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: visible;
+}
+
+/* Adjacent bonus styling */
+.adjacent-bonus-factory {
+  background: rgba(76, 175, 80, 0.05);
+  border-color: rgba(76, 175, 80, 0.2);
+}
+
+.adjacent-bonus-power {
+  background: rgba(33, 150, 243, 0.05);
+  border-color: rgba(33, 150, 243, 0.2);
+}
+
+.adjacent-bonus-indicator {
+  position: absolute;
+  bottom: -2px;
+  font-size: 0.5rem;
+  padding: 2px 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #4caf50;
+  border-radius: 4px;
+  pointer-events: none;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* Income breakdown styling */
+.income-breakdown {
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.income-breakdown .info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  color: #aaa;
+}
+
+.income-breakdown .info-row.total {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: bold;
+}
+
+.income-breakdown .profit {
+  color: #4caf50;
+}
+
+.building-stats {
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.income-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  color: #aaa;
+  font-size: 0.9em;
+}
+
+.info-row.total {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: bold;
+}
+
+.profit {
+  color: #4caf50;
+}
+
+.storage {
+  color: #2196f3;
+}

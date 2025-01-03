@@ -1,0 +1,1192 @@
+* {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #1a1a1a;
+  background-image: none;
+}
+
+.grid-container {
+  position: absolute;
+  transform-origin: 0 0;
+  display: grid;
+  gap: 0;
+  background: transparent;
+  border: 1px solid #222;
+  pointer-events: all;
+  transform: translateZ(0) scale(1);
+  -webkit-transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform-style: flat;
+  will-change: transform, scale;
+}
+
+.tile {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border-right: 1px solid #222;
+  border-bottom: 1px solid #222;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: all !important;
+  z-index: 0;
+}
+
+.tile:hover {
+  background: rgba(68, 68, 68, 0.5) !important;
+  cursor: pointer;
+}
+
+.tile:active {
+  cursor: grabbing;
+}
+
+.tile.selected {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.6), rgba(255, 223, 0, 0.6)) !important;
+  border-color: rgb(255, 215, 0);
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 223, 0, 0.6);
+  animation: pulse 2s infinite;
+  position: relative;
+  z-index: 100;
+}
+
+.tile.selected .building-gif-icon {
+  position: relative;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 223, 0, 0.6);
+    z-index: 100;
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 7px rgba(255, 215, 0, 1), 0 0 15px rgba(255, 223, 0, 0.8);
+    z-index: 100;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.8), 0 0 10px rgba(255, 223, 0, 0.6);
+    z-index: 100;
+  }
+}
+
+.popup button {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  background: #4a4a4a;
+  color: white;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.popup button:hover {
+  background: #5a5a5a;
+}
+
+
+.resource-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: white;
+  z-index: 1100;
+  gap: 40px;
+  backdrop-filter: blur(5px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.building-info {
+  position: fixed;
+  right: 10px;
+  top: 70px;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 15px;
+  border-radius: 8px;
+  color: white;
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 250px;
+}
+
+.building-info h3 {
+  margin: 0 0 10px 0;
+  color: #4a90e2;
+  font-size: 1em;
+  border-bottom: 2px solid rgba(74, 144, 226, 0.3);
+  padding-bottom: 8px;
+}
+
+.building-info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  transition: background 0.2s;
+  font-size: 0.9em;
+}
+
+.building-info-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.building-info-icon {
+  font-size: 1.2em;
+  margin-right: 12px;
+  min-width: 25px;
+  text-align: center;
+}
+
+.building-info-details {
+  flex: 1;
+}
+
+.building-info-name {
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 4px;
+}
+
+.building-info-stats {
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.building-info-cost {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.building-info-power {
+  color: #ff9800;
+}
+
+.building-info-storage {
+  color: #2196f3;
+}
+
+.building-info-money {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.start-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+}
+
+.start-screen button {
+  padding: 15px 30px;
+  font-size: 1.2em;
+  background: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.start-screen button:hover {
+  background: #5a5a5a;
+}
+
+.reset-button {
+  padding: 5px 15px;
+  background: linear-gradient(to bottom, #f44336, #d32f2f);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background: linear-gradient(to bottom, #f55a4e, #e33e33);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.popup button:disabled {
+  background: #2a2a2a !important;
+  cursor: not-allowed;
+  opacity: 1;
+  position: relative;
+  border: 1px solid #ff4444 !important;
+  color: #999 !important;
+}
+
+.popup button:disabled::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateX(100%) translateY(-50%);
+  background: rgba(255, 68, 68, 0.9);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.popup button:disabled:hover::after {
+  opacity: 1;
+}
+
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  cursor: default;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  will-change: transform;
+  image-rendering: pixelated !important;
+  image-rendering: crisp-edges !important;
+  -webkit-font-smoothing: none !important;
+}
+
+.game-container:active {
+  cursor: grabbing;
+}
+
+/* When middle mouse button is pressed */
+.game-container[data-dragging="true"],
+.game-container[data-dragging="true"] * {
+  cursor: grabbing !important;
+}
+
+/* When middle mouse button is not pressed but hovering */
+.game-container:hover {
+  cursor: default;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.button-group button,
+.button-group label {
+  padding: 8px 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 100px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.center-button {
+  background: none !important;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s;
+  width: auto !important;
+  height: auto !important;
+  min-width: unset !important;
+  box-shadow: none !important;
+}
+
+.center-button:hover {
+  transform: scale(1.1);
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.stats-panel {
+  position: fixed;
+  left: 10px;
+  top: 85px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  border-radius: 5px;
+  color: white;
+  z-index: 1000;
+  min-width: 200px;
+}
+
+.stats-panel h3 {
+  margin: 0 0 10px 0;
+  color: #4a90e2;
+}
+
+.stats-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+  color: #aaa;
+}
+
+.stat-value {
+  font-weight: bold;
+}
+
+.stat-value.positive {
+  color: #4caf50;
+}
+
+.stat-value.negative {
+  color: #f44336;
+}
+
+/* Update building-info position to not overlap with stats panel */
+.building-info {
+  right: -5px;
+  top: 70px;
+}
+
+/* Add styles for the sell button */
+.sell-button {
+  background: #d32f2f !important;
+  color: white;
+  padding: 8px 15px !important;
+  font-weight: bold;
+}
+
+.sell-button:hover {
+  background: #b71c1c !important;
+}
+
+/* Add styles for close button */
+.close-button {
+  position: absolute !important;
+  right: -8px;
+  top: -8px;
+  min-width: 20px !important;
+  max-width: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: #ff4444 !important;
+  color: white;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  flex-shrink: 0;
+}
+
+.close-button:hover {
+  background: #ff6666 !important;
+}
+
+/* Override any inherited button styles */
+.popup .close-button {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Add styles for the building icons */
+.building-icon {
+  margin-right: 8px;
+  font-size: 1.2em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Add styles for upgraded buildings */
+.tile .building-letter {
+  pointer-events: none;
+  position: relative;
+  z-index: 2;
+}
+
+.tile[data-level="1"] {
+  background: linear-gradient(135deg, rgba(65, 105, 225, 0.2), rgba(65, 105, 225, 0.3));
+}
+
+.tile[data-level="2"] {
+  background: linear-gradient(135deg, rgba(148, 0, 211, 0.2), rgba(148, 0, 211, 0.3));
+}
+
+.tile[data-level="1"] .building-letter::after,
+.tile[data-level="2"] .building-letter::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.tile[data-level="1"] .building-letter::after {
+  background: #4169e1;
+}
+
+.tile[data-level="2"] .building-letter::after {
+  background: #9400d3;
+}
+
+/* Add styles for the upgrade button */
+.upgrade-button {
+  background: #4a90e2 !important;
+  color: white;
+  padding: 8px 15px !important;
+  font-weight: bold;
+}
+
+.upgrade-button:hover {
+  background: #357abd !important;
+}
+
+/* Add styles for save/load buttons */
+.save-button {
+  background: linear-gradient(to bottom, #4caf50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background: linear-gradient(to bottom, #5cb860, #4caf50);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.import-button {
+  background: linear-gradient(to bottom, #2196f3, #1e88e5);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.import-button:hover {
+  background: linear-gradient(to bottom, #42a5f5, #2196f3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.button-group button:active,
+.button-group label:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Add styles for settings dropdown */
+.settings-dropdown {
+  position: relative;
+  z-index: 1200;
+}
+
+.settings-icon {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s;
+}
+
+.settings-icon:hover {
+  transform: rotate(45deg);
+}
+
+.settings-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 200px;
+  z-index: 1300;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-top: 8px;
+}
+
+.settings-menu button,
+.settings-menu label {
+  position: relative;
+  z-index: 1301;
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin: 4px 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: left;
+}
+
+.settings-menu button:hover,
+.settings-menu label:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.settings-menu .danger-button {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+.settings-menu .danger-button:hover {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+/* Add style for resource item */
+.resource-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.resource-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.resource-label {
+  color: #aaa;
+  font-size: 0.9em;
+}
+
+.resource-value {
+  font-weight: bold;
+  color: #4a90e2;
+}
+
+.resource-value.money {
+  color: #4caf50;
+}
+
+.resource-value.power {
+  color: #ff9800;
+}
+
+.resource-value.storage {
+  color: #2196f3;
+}
+
+/* Add control buttons container */
+.control-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Add level 3 styling */
+.tile[data-level="3"] {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.3));
+}
+
+.tile[data-level="3"] .building-letter::after {
+  background: #ffd700;
+}
+
+/* Add warning styles */
+.power-warning-icon {
+  color: #ff9800;
+  margin-left: 5px;
+  animation: pulse 1s infinite;
+}
+
+.resource-value.power.warning {
+  color: #ff9800;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Add power storage styles */
+.power-storage {
+  color: #4caf50;
+  margin-left: 5px;
+  font-size: 0.9em;
+  padding: 2px 6px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+/* Update power warning to not conflict with storage display */
+.power-warning-icon {
+  margin-left: 5px;
+  color: #ff9800;
+  animation: pulse 1s infinite;
+}
+
+/* Add tooltip for power storage */
+.power-storage {
+  position: relative;
+  cursor: help;
+}
+
+.power-storage:hover::after {
+  content: 'Stored excess power';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+/* Add power outage styles */
+.tile.power-outage {
+  position: relative;
+}
+
+.power-outage-icon {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  color: #ff4444;
+  font-size: 12px;
+  animation: powerOutageIconPulse 1s infinite;
+}
+
+@keyframes powerOutageIconPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Update power warning styles */
+.resource-value.power.critical-warning {
+  color: #ff4444;
+  animation: criticalPowerPulse 1s infinite;
+}
+
+@keyframes criticalPowerPulse {
+  0% { color: #ff4444; }
+  50% { color: #ff8888; }
+  100% { color: #ff4444; }
+}
+
+/* Add maintenance styling */
+.tile.needs-maintenance {
+  animation: maintenancePulse 2s infinite;
+  position: relative;
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.maintenance-icon {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  font-size: 12px;
+  color: #ff4444;
+  animation: iconPulse 1s infinite;
+  filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.5));
+  z-index: 2;
+}
+
+@keyframes maintenancePulse {
+  0% { 
+    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.3);
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+  50% { 
+    box-shadow: inset 0 0 25px rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.3);
+  }
+  100% { 
+    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.3);
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+}
+
+@keyframes iconPulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Make sure maintenance state shows through selection */
+.tile.selected.needs-maintenance {
+  background: linear-gradient(135deg, 
+    rgba(255, 0, 0, 0.3), 
+    rgba(255, 0, 0, 0.4)
+  );
+}
+
+.event-notification {
+  background: rgba(255, 0, 0, 0.1);
+  border-left: 3px solid #ff4444;
+  padding: 10px;
+  margin: 5px 0;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes warningPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
+}
+
+.repair-button {
+  background: #ff9800 !important;
+  color: white;
+  padding: 8px 15px !important;
+  font-weight: bold;
+}
+
+.repair-button:hover {
+  background: #f57c00 !important;
+}
+
+.repair-button:disabled {
+  background: #2a2a2a !important;
+  cursor: not-allowed;
+  opacity: 1;
+  border: 1px solid #ff9800 !important;
+  color: #999 !important;
+}
+
+/* Update events panel styling */
+.events-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.event-notification {
+  background: rgba(0, 0, 0, 0.9);
+  border-left: 4px solid #ff4444;
+  padding: 12px 20px;
+  color: white;
+  border-radius: 4px;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.event-notification h4 {
+  margin: 0 0 5px 0;
+  color: #ff4444;
+  font-size: 1.1em;
+}
+
+.event-notification p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9em;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Update tile states styling */
+.tile.needs-maintenance.power-outage {
+  animation: combinedPulse 2s infinite;
+  position: relative;
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+@keyframes combinedPulse {
+  0% { 
+    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.3), 0 0 15px rgba(255, 68, 68, 0.3);
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+  50% { 
+    box-shadow: inset 0 0 25px rgba(255, 0, 0, 0.5), 0 0 25px rgba(255, 68, 68, 0.5);
+    background-color: rgba(255, 0, 0, 0.4);
+  }
+  100% { 
+    box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.3), 0 0 15px rgba(255, 68, 68, 0.3);
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+}
+
+/* Position both icons */
+.maintenance-icon {
+  left: -5px;
+}
+
+.power-outage-icon {
+  right: -5px;
+}
+
+.maintenance-icon, .power-outage-icon {
+  position: absolute;
+  top: -5px;
+  font-size: 12px;
+  color: #ff4444;
+  animation: iconPulse 1s infinite;
+  filter: drop-shadow(0 0 2px rgba(255, 0, 0, 0.5));
+  z-index: 2;
+}
+
+.floating-text {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.save-indicator {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  animation: fadeInOut 1s ease-in-out;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.game-container, .grid-container, .tile {
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.building-icon {
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Add specific middle-button press detection */
+.game-container.middle-press,
+.game-container.middle-press * {
+  cursor: grab;
+}
+
+.game-container.middle-press:active,
+.game-container.middle-press:active * {
+  cursor: grabbing;
+}
+
+.bottom-popup {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 1rem;
+  border-radius: 10px 10px 0 0;
+  z-index: 1000;
+  width: 500px;
+  max-width: 600px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.popup-header h3 {
+  margin: 0;
+  color: white;
+}
+
+.building-actions, .building-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.building-actions button, .building-options button {
+  min-width: 150px;
+  padding: 0.5rem 1rem;
+}
+
+.building-types {
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.selected-building {
+  background: rgba(0, 0, 0, 0.98);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.selected-building-info {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  background: rgba(0, 0, 0, 0.98);
+  padding: 15px;
+  border-radius: 8px;
+  color: white;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 265px;
+}
+
+.building-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.building-info-item {
+  padding: 6px;
+  font-size: 0.9em;
+}
+
+.building-info-icon {
+  font-size: 1.2em;
+  min-width: 25px;
+}
+
+.building-info h3 {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.tile .building-gif-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  vertical-align: middle;
+  image-rendering: pixelated;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+
+/* Shop/UI building icons */
+.building-options .building-icon .building-gif-icon,
+.building-info .building-icon .building-gif-icon {
+  width: 32px !important;
+  height: 32px !important;
+  transform: none !important;
+  position: relative;
+}
+
+/* Specific building styles for grid tiles */
+.tile img[alt="Factory"].building-gif-icon,
+.tile img[alt="Warehouse"].building-gif-icon {
+  width: 32px;
+  height: 32px;
+  top: 0px;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.tile img[alt="Power Plant"].building-gif-icon,
+.tile img[alt="Research Lab"].building-gif-icon,
+.tile img[alt="Compactor"].building-gif-icon {
+  width: 60px;
+  height: 60px;
+  top: -14px;
+  bottom: 0px;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Remove the old adjacent bonus backgrounds since we're using the heat map now */
+.adjacent-bonus-factory,
+.adjacent-bonus-power {
+  background: none;
+}
+
+.circle-button.max-upgrade {
+  background: linear-gradient(to bottom, #9c27b0, #7b1fa2);
+  color: white;
+}
+
+.circle-button.max-upgrade:hover {
+  background: linear-gradient(to bottom, #ab47bc, #8e24aa);
+}
+
+.circle-button.max-upgrade:disabled {
+  background: #2a2a2a !important;
+  cursor: not-allowed;
+  opacity: 1;
+  border: 1px solid #9c27b0 !important;
+  color: #999 !important;
+}
+
+/* Update the max upgrade button styles with higher specificity */
+.building-actions .circle-button.max-upgrade {
+  background: linear-gradient(to bottom, #9c27b0, #7b1fa2) !important;
+  color: white;
+}
+
+.building-actions .circle-button.max-upgrade:hover {
+  background: linear-gradient(to bottom, #ab47bc, #8e24aa) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(156, 39, 176, 0.3);
+}
+
+.building-actions .circle-button.max-upgrade:disabled {
+  background: #2a2a2a !important;
+  cursor: not-allowed;
+  opacity: 1;
+  border: 1px solid #9c27b0 !important;
+  color: #999 !important;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Add or update these styles */
+.tile .building-letter,
+.tile .building-level,
+.tile .adjacent-bonus-indicator,
+.tile .building-gif-icon,
+.tile motion.span {
+  pointer-events: none !important;
+  user-select: none;
+  -webkit-user-drag: none;
+  z-index: 10;
+}
+
+/* Add this new style for the motion.span container */
+.tile motion.span {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none !important;
+}
+
+/* Add styles for upgrade all button */
+.building-actions .circle-button.upgrade-all {
+  background: linear-gradient(to bottom, #673ab7, #512da8) !important;
+  color: white;
+}
+
+.building-actions .circle-button.upgrade-all:hover {
+  background: linear-gradient(to bottom, #7e57c2, #673ab7) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(103, 58, 183, 0.3);
+}
+
+.building-actions .circle-button.upgrade-all:disabled {
+  background: #2a2a2a !important;
+  cursor: not-allowed;
+  opacity: 1;
+  border: 1px solid #673ab7 !important;
+  color: #999 !important;
+  transform: none;
+  box-shadow: none;
+}
